@@ -21,7 +21,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -106,6 +108,35 @@ public class MainFragment extends Fragment {
                 isSwapped = true;
 
             }
+
+
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Bitmap icon;
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+
+                    View itemView = viewHolder.itemView;
+                    float height = (float) itemView.getBottom() - (float) itemView.getTop();
+                    float width = height / 3;
+
+                    Paint p = new Paint();
+                    if (dX < 0) {
+                        p.setColor(Color.parseColor("#D32F2F"));
+                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                        c.drawRect(background,p);
+                        icon = BitmapFactory.decodeResource(getResources(), R.drawable.icons8_trash_50);
+
+                        if (icon == null) {
+                            Log.d("ISNULL", "NULL");
+                        } else {
+                            RectF icon_dest = new RectF((float) itemView.getRight() - 2*width ,(float) itemView.getTop() + width,(float) itemView.getRight() - width,(float)itemView.getBottom() - width);                            c.drawBitmap(icon, null, icon_dest, p);
+                        }
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+
         });
         touchHelper.attachToRecyclerView(recyclerView);
         mModel.getTodo().observe(this, todos -> mAdapter.setItems(todos));
