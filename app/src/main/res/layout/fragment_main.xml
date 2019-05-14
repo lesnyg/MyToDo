@@ -23,6 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="+add a new task"
+            android:inputType="text"
+            android:imeOptions="actionDone"
             android:textSize="24sp"/>
 
         <Button
