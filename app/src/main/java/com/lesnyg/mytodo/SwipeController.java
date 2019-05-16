@@ -15,7 +15,8 @@ import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_SWIPE;
 enum ButtonsState {
     GONE,
     LEFT_VISIBLE,
-    RIGHT_VISIBLE
+    RIGHT_VISIBLE,
+    RIGHT_VISIBLE2
 }
 
 class SwipeController extends ItemTouchHelper.Callback {
@@ -30,7 +31,7 @@ class SwipeController extends ItemTouchHelper.Callback {
 
     private SwipeControllerActions buttonsActions = null;
 
-    private static final float buttonWidth = 300;
+    private static final float buttonWidth = 150;
 
     public SwipeController(SwipeControllerActions buttonsActions) {
         this.buttonsActions = buttonsActions;
@@ -66,7 +67,7 @@ class SwipeController extends ItemTouchHelper.Callback {
             if (buttonShowedState != ButtonsState.GONE) {
                 if (buttonShowedState == ButtonsState.LEFT_VISIBLE) dX = Math.max(dX, buttonWidth);
                 if (buttonShowedState == ButtonsState.RIGHT_VISIBLE)
-                    dX = Math.min(dX, -buttonWidth);
+                    dX = Math.min(dX, -buttonWidth*2);
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             } else {
                 setTouchListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -130,6 +131,8 @@ class SwipeController extends ItemTouchHelper.Callback {
                             buttonsActions.onLeftClicked(viewHolder.getAdapterPosition());
                         } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
                             buttonsActions.onRightClicked(viewHolder.getAdapterPosition());
+                        }else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE2) {
+                            buttonsActions.onRightClicked2(viewHolder.getAdapterPosition());
                         }
                     }
                     buttonShowedState = ButtonsState.GONE;
@@ -147,8 +150,8 @@ class SwipeController extends ItemTouchHelper.Callback {
     }
 
     private void drawButtons(Canvas c, RecyclerView.ViewHolder viewHolder) {
-        float buttonWidthWithoutPadding = buttonWidth - 20;
-        float corners = 16;
+        float buttonWidthWithoutPadding = buttonWidth;
+        float corners = 0;
 
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
@@ -158,21 +161,34 @@ class SwipeController extends ItemTouchHelper.Callback {
         c.drawRoundRect(leftButton, corners, corners, p);
         drawText("EDIT", c, leftButton, p);
 
+        RectF leftButton2 = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
+        p.setColor(Color.BLUE);
+        c.drawRoundRect(leftButton2, corners, corners, p);
+        drawText("EDIT", c, leftButton2, p);
+
+
         RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        p.setColor(Color.RED);
+        p.setColor(Color.DKGRAY);
         c.drawRoundRect(rightButton, corners, corners, p);
-        drawText("DELETE", c, rightButton, p);
+        drawText("삭제", c, rightButton, p);
+
+        RectF rightButton2 = new RectF(itemView.getRight() - buttonWidthWithoutPadding*2, itemView.getTop(), itemView.getRight()-buttonWidth, itemView.getBottom());
+        p.setColor(Color.BLUE);
+        c.drawRoundRect(rightButton2, corners, corners, p);
+        drawText("공유", c, rightButton2, p);
 
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
             buttonInstance = leftButton;
         } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
             buttonInstance = rightButton;
+        }else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE2) {
+            buttonInstance = rightButton2;
         }
     }
 
     private void drawText(String text, Canvas c, RectF button, Paint p) {
-        float textSize = 60;
+        float textSize = 30;
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
         p.setTextSize(textSize);

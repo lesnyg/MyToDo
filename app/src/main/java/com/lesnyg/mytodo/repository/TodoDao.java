@@ -10,6 +10,9 @@ import java.util.List;
 
 @Dao
 public interface TodoDao {
+    boolean isDone=true;
+
+
     @Query("SELECT * FROM todo ORDER BY `order`")
     LiveData<List<Todo>> getAll();
 
@@ -24,5 +27,8 @@ public interface TodoDao {
 
     @Delete
     void deleteTodo(Todo todo);
+
+    @Query("SELECT * FROM todo WHERE isDone=1")
+    LiveData<List<Todo>> getComplete();
 
 }

@@ -9,10 +9,29 @@ public class Todo {
     private int id;
     private String title;
     private int order;
+    private String date;
+    private boolean isDone = false;
 
-    public Todo(String title, int order) {
+    public Todo(String title, int order, String date) {
         this.title = title;
         this.order = order;
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
     }
 
     public int getId() {
