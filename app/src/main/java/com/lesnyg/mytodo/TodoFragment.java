@@ -127,7 +127,7 @@ public class TodoFragment extends Fragment {
 
                 mTodoTitle = mEditText.getText().toString();
                 AppDatabase.getInstance(requireActivity()).todoDao().insertTodo(
-                        new Todo(mTodoTitle, mAdapter.mItems.size(),getTime2)
+                        new Todo(mTodoTitle, mAdapter.mItems.size(),getTime)
 
                 );
                 mEditText.setText("");
@@ -141,7 +141,7 @@ public class TodoFragment extends Fragment {
                     default:
                         mTodoTitle = mEditText.getText().toString();
                         AppDatabase.getInstance(requireActivity()).todoDao().insertTodo(
-                                new Todo(mTodoTitle, mAdapter.mItems.size(),getTime2)
+                                new Todo(mTodoTitle, mAdapter.mItems.size(),getTime)
                         );
 
                         mEditText.setText("");
