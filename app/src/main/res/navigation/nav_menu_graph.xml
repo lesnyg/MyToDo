@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_menu_graph"
-    app:startDestination="@id/todoFragment2">
+    app:startDestination="@id/todoFragment">
     <fragment
-        android:id="@+id/todoFragment2"
+        android:id="@+id/todoFragment"
         android:name="com.lesnyg.mytodo.TodoFragment"
         android:label="fragment_todo"
         tools:layout="@layout/fragment_todo" />
     <fragment
-        android:id="@+id/completeFragment2"
+        android:id="@+id/completeFragment"
         android:name="com.lesnyg.mytodo.completeFragment"
         android:label="fragment_complete"
         tools:layout="@layout/fragment_complete" />

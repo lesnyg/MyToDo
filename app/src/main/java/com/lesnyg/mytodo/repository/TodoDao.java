@@ -10,14 +10,14 @@ import java.util.List;
 
 @Dao
 public interface TodoDao {
-    boolean isDone=true;
+    boolean isDone = true;
 
 
     @Query("SELECT * FROM todo ORDER BY `order`")
     LiveData<List<Todo>> getAll();
 
     @Insert
-    void insertTodo(Todo...todo);
+    void insertTodo(Todo... todo);
 
     @Insert
     void insertTodo(List<Todo> todo);
@@ -27,6 +27,9 @@ public interface TodoDao {
 
     @Delete
     void deleteTodo(Todo todo);
+
+    @Query("SELECT MAX(`order`) FROM todo ")
+    int getOrderMax();
 
     @Query("SELECT * FROM todo WHERE isDone=1")
     LiveData<List<Todo>> getComplete();

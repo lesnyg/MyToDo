@@ -1,6 +1,7 @@
 package com.lesnyg.mytodo;
 
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -25,6 +26,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.lesnyg.mytodo.R;
 import com.lesnyg.mytodo.databinding.ItemTodoBinding;
 import com.lesnyg.mytodo.repository.AppDatabase;
@@ -80,11 +82,42 @@ public class TodoFragment extends Fragment {
 
             @Override
             public void onChedkBoxClicked(Todo model) {
-                Toast.makeText(requireActivity(), "체크박스 클릭됨", Toast.LENGTH_SHORT).show();
                 mModel.update(mAdapter.getItems());
+                LottieAnimationView lottie = (LottieAnimationView) view.findViewById(R.id.lottie);
+                if(isDone){
+                lottie.setVisibility(View.VISIBLE);
+                lottie.playAnimation();}
+                lottie.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lottie.setVisibility(View.GONE);
+                    }
+                });
+            lottie.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                lottie.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
+
+            }
+        });
+
         recyclerView.setAdapter(mAdapter);
 
 
@@ -187,8 +220,11 @@ public class TodoFragment extends Fragment {
 
         return view;
 
-    }
 
+
+
+
+    }
 
 
     static class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
@@ -200,7 +236,7 @@ public class TodoFragment extends Fragment {
 
         private OnTodoClickListener mListener;
 
-        private List<Todo> mItems = new ArrayList<>();
+        public List<Todo> mItems = new ArrayList<>();
 
         public TodoAdapter() {
         }

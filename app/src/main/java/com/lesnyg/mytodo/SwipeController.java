@@ -16,7 +16,6 @@ enum ButtonsState {
     GONE,
     LEFT_VISIBLE,
     RIGHT_VISIBLE,
-    RIGHT_VISIBLE2
 }
 
 class SwipeController extends ItemTouchHelper.Callback {
@@ -32,6 +31,9 @@ class SwipeController extends ItemTouchHelper.Callback {
     private SwipeControllerActions buttonsActions = null;
 
     private static final float buttonWidth = 150;
+    private RectF mLeftButton;
+    private RectF mRightButton;
+    private RectF mRightButton2;
 
     public SwipeController(SwipeControllerActions buttonsActions) {
         this.buttonsActions = buttonsActions;
@@ -126,13 +128,25 @@ class SwipeController extends ItemTouchHelper.Callback {
                     setItemsClickable(recyclerView, true);
                     swipeBack = false;
 
-                    if (buttonsActions != null && buttonInstance != null && buttonInstance.contains(event.getX(), event.getY())) {
+                    if (buttonsActions != null && buttonInstance != null) {
                         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
-                            buttonsActions.onLeftClicked(viewHolder.getAdapterPosition());
-                        } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-                            buttonsActions.onRightClicked(viewHolder.getAdapterPosition());
-                        }else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE2) {
-                            buttonsActions.onRightClicked2(viewHolder.getAdapterPosition());
+                            if (mLeftButton.contains(event.getX(), event.getY())) {
+                                buttonsActions.onLeftClicked(viewHolder.getAdapterPosition());
+                            }
+//                             else if (leftButton2.contains(event.getX(), event.getY())) {
+//                                buttonsActions.onLeftClicked2(viewHolder.getAdapterPosition());
+//
+//                            }
+                        } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE  && buttonInstance.contains(event.getX(), event.getY())) {
+                            if (buttonInstance.contains(event.getX(), event.getY())) {
+                                buttonsActions.onRightClicked(viewHolder.getAdapterPosition());
+
+                            } else if (mRightButton2.contains(event.getX(), event.getY())) {
+                                buttonsActions.onRightClicked2(viewHolder.getAdapterPosition());
+
+                            }
+
+
                         }
                     }
                     buttonShowedState = ButtonsState.GONE;
@@ -156,10 +170,10 @@ class SwipeController extends ItemTouchHelper.Callback {
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
 
-        RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
+        mLeftButton = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
         p.setColor(Color.BLUE);
-        c.drawRoundRect(leftButton, corners, corners, p);
-        drawText("EDIT", c, leftButton, p);
+        c.drawRoundRect(mLeftButton, corners, corners, p);
+        drawText("EDIT", c, mLeftButton, p);
 
         RectF leftButton2 = new RectF(itemView.getLeft(), itemView.getTop(), itemView.getLeft() + buttonWidthWithoutPadding, itemView.getBottom());
         p.setColor(Color.BLUE);
@@ -167,23 +181,22 @@ class SwipeController extends ItemTouchHelper.Callback {
         drawText("EDIT", c, leftButton2, p);
 
 
-        RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+        mRightButton = new RectF(itemView.getRight() - buttonWidthWithoutPadding, itemView.getTop(), itemView.getRight(), itemView.getBottom());
         p.setColor(Color.DKGRAY);
-        c.drawRoundRect(rightButton, corners, corners, p);
-        drawText("삭제", c, rightButton, p);
+        c.drawRoundRect(mRightButton, corners, corners, p);
+        drawText("삭제", c, mRightButton, p);
 
-        RectF rightButton2 = new RectF(itemView.getRight() - buttonWidthWithoutPadding*2, itemView.getTop(), itemView.getRight()-buttonWidth, itemView.getBottom());
+        mRightButton2 = new RectF(itemView.getRight() - buttonWidthWithoutPadding*2, itemView.getTop(), itemView.getRight()-buttonWidth, itemView.getBottom());
         p.setColor(Color.BLUE);
-        c.drawRoundRect(rightButton2, corners, corners, p);
-        drawText("공유", c, rightButton2, p);
+        c.drawRoundRect(mRightButton2, corners, corners, p);
+        drawText("공유", c, mRightButton2, p);
 
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.LEFT_VISIBLE) {
-            buttonInstance = leftButton;
+            buttonInstance = mLeftButton;
         } else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE) {
-            buttonInstance = rightButton;
-        }else if (buttonShowedState == ButtonsState.RIGHT_VISIBLE2) {
-            buttonInstance = rightButton2;
+            buttonInstance = mRightButton;
+            buttonInstance = mRightButton2;
         }
     }
 

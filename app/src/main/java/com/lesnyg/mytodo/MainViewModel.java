@@ -14,7 +14,7 @@ import com.lesnyg.mytodo.repository.Todo;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
-    private AppDatabase db;
+    public AppDatabase db;
     public MainViewModel(@NonNull Application application) {
         super(application);
         db = AppDatabase.getInstance(application);
@@ -43,5 +43,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public void isChecked(Todo todo){
 
+    }
+
+    public int orderMaxSize(){
+        return db.todoDao().getOrderMax();
     }
 }
